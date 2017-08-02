@@ -214,7 +214,7 @@ def handle_calculate_IK(req):
             r32 = R3_6[2,1]
             r33 = R3_6[2,2]
 
-            theta4 = atan2(r33, -r13) 
+            #theta4 = atan2(r33, -r13) 
             #th4deg = theta4*rtd
 	    #print'theta4 = ', simplify(th4deg)
 
@@ -222,9 +222,17 @@ def handle_calculate_IK(req):
             #th5deg = theta5*rtd
 	    #print'theta5 = ', simplify(th5deg)
 
-            theta6 = atan2(-r22, r21) 
+            #theta6 = atan2(-r22, r21) 
             #th6deg = theta6*rtd
 	    #print'theta6 = ', simplify(th6deg)
+
+            #limit wrist from excessive rotations
+            if sin(theta5) < 0:
+	       theta4 = atan2(-r33, r13)
+	       theta6 = atan2(r22, -r21)
+	    else:
+	       theta4 = atan2(r33, -r13)
+	       theta6 = atan2(-r22, r21)
 
             print "FW Kinematics Result:"
             print(T_total.evalf(subs={q1:theta1, q2:theta2, q3:theta3, q4:theta4, q5:theta5, q6:theta6}))
